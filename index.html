@@ -14,7 +14,7 @@
         }
 
         body {
-            background-image: url('images/background.png'); /* Ganti dengan nama file foto Anda */
+            background-image: url('images/background.png');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -51,6 +51,22 @@
 
         .note-input {
             margin-bottom: 1.5rem;
+        }
+
+        #noteTitle {
+            margin-bottom: 0.75rem;
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 0.5rem;
+            font-size: clamp(0.875rem, 2.5vw, 1rem);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        #noteTitle:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
         }
 
         textarea {
@@ -158,6 +174,13 @@
             word-break: break-word;
         }
 
+        .note-content h3 {
+            font-size: clamp(1rem, 3vw, 1.25rem);
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
         .note-actions {
             display: flex;
             gap: 0.5rem;
@@ -206,7 +229,6 @@
             font-size: clamp(0.875rem, 2.5vw, 1rem);
         }
 
-        /* Media Queries untuk Responsivitas */
         @media (max-width: 600px) {
             .container {
                 padding: 1rem;
@@ -244,7 +266,6 @@
             }
         }
 
-        /* Reduced motion untuk aksesibilitas */
         @media (prefers-reduced-motion: reduce) {
             button {
                 transition: none;
@@ -265,6 +286,7 @@
             <h1>Note App</h1>
         </div>
         <div class="note-input">
+            <input type="text" id="noteTitle" placeholder="Enter note title...">
             <textarea id="noteInput" placeholder="Write your note here..."></textarea>
         </div>
         <div class="buttons">
@@ -279,14 +301,15 @@
         let notes = JSON.parse(localStorage.getItem('notes')) || [];
 
         function saveNote() {
-            const noteInput = document.getElementById('noteInput');
-            const noteText = noteInput.value.trim();
+            const noteTitle = document.getElementById('noteTitle').value.trim();
+            const noteInput = document.getElementById('noteInput').value.trim();
 
-            if (noteText) {
+            if (noteInput) {
                 const timestamp = new Date().toLocaleString();
-                notes.unshift({ text: noteText, timestamp: timestamp });
+                notes.unshift({ title: noteTitle || 'Untitled', text: noteInput, timestamp: timestamp });
                 localStorage.setItem('notes', JSON.stringify(notes));
-                noteInput.value = '';
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteInput').value = '';
                 renderNotes();
             }
         }
@@ -300,6 +323,7 @@
                 noteItem.className = 'note-item';
                 noteItem.innerHTML = `
                     <div class="note-content">
+                        <h3>${note.title}</h3>
                         <p>${note.text}</p>
                         <div class="timestamp">${note.timestamp}</div>
                     </div>
@@ -313,7 +337,8 @@
         }
 
         function copyNote(index) {
-            const noteText = notes[index].text;
+            const note = notes[index];
+            const noteText = `${note.title}\n${note.text}`;
             navigator.clipboard.writeText(noteText).then(() => {
                 showNotification();
             });
@@ -326,6 +351,7 @@
         }
 
         function clearInput() {
+            document.getElementById('noteTitle').value = '';
             document.getElementById('noteInput').value = '';
         }
 
