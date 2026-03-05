@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Note App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,11 +14,9 @@
         }
 
         body {
-            background-image: url('images/background.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -26,147 +24,217 @@
             padding: 1.5rem;
         }
 
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 
+                0 8px 32px rgba(31, 38, 135, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
             width: 100%;
             max-width: 40rem;
-            padding: 1.5rem;
+            padding: 2rem;
             margin: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 1;
         }
 
         h1 {
-            color: #ffab00;
-            font-size: clamp(1.5rem, 5vw, 1.8rem);
+            color: rgba(255, 255, 255, 0.95);
+            font-size: clamp(1.5rem, 5vw, 2rem);
             font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            letter-spacing: -0.5px;
         }
 
         .note-input {
             margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
         }
 
         #noteTitle {
             margin-bottom: 0.75rem;
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
             font-size: clamp(0.875rem, 2.5vw, 1rem);
-            transition: border-color 0.3s, box-shadow 0.3s;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        #noteTitle::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         #noteTitle:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
         textarea {
             width: 100%;
-            min-height: 8rem;
-            padding: 0.75rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 0.5rem;
+            min-height: 10rem;
+            padding: 1rem 1.25rem;
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 1rem;
             resize: vertical;
             font-size: clamp(0.875rem, 2.5vw, 1rem);
-            transition: border-color 0.3s, box-shadow 0.3s;
+            color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.5);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
         }
 
         .buttons {
             display: flex;
             gap: 0.75rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
         }
 
         button {
-            padding: 0.75rem 1.5rem;
+            padding: 0.875rem 1.75rem;
             border: none;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
             cursor: pointer;
             font-size: clamp(0.875rem, 2.5vw, 0.9375rem);
             font-weight: 500;
             position: relative;
             overflow: hidden;
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
 
         button:active {
-            transform: scale(0.95);
-        }
-
-        button::after {
-            content: '';
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            transition: transform 0.3s;
-            pointer-events: none;
-        }
-
-        button:active::after {
-            transform: translate(-50%, -50%) scale(1);
-            opacity: 0;
+            transform: scale(0.96);
         }
 
         .save-btn {
-            background: #007bff;
+            background: rgba(255, 255, 255, 0.3);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .save-btn:hover {
-            background: #0056b3;
+            background: rgba(255, 255, 255, 0.45);
         }
 
         .clear-btn {
-            background: #dc3545;
-            color: white;
+            background: rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .clear-btn:hover {
-            background: #b02a37;
+            background: rgba(255, 255, 255, 0.25);
         }
 
         .note-list {
             max-height: 50vh;
             overflow-y: auto;
             padding-right: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .note-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .note-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .note-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
         }
 
         .note-item {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-bottom: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 1.25rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 0.75rem;
+            gap: 1rem;
             flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .note-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
         .note-content {
@@ -177,8 +245,14 @@
         .note-content h3 {
             font-size: clamp(1rem, 3vw, 1.25rem);
             font-weight: 600;
-            color: #333;
+            color: rgba(255, 255, 255, 0.95);
             margin-bottom: 0.5rem;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .note-content p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
         }
 
         .note-actions {
@@ -188,51 +262,71 @@
         }
 
         .copy-btn, .delete-btn {
-            padding: 0.5rem;
+            padding: 0.5rem 1rem;
             font-size: clamp(0.75rem, 2vw, 0.875rem);
+            border-radius: 0.75rem;
         }
 
         .copy-btn {
-            background: #28a745;
+            background: rgba(255, 255, 255, 0.25);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .copy-btn:hover {
-            background: #218838;
+            background: rgba(255, 255, 255, 0.4);
         }
 
         .delete-btn {
-            background: #dc3545;
+            background: rgba(255, 107, 107, 0.3);
             color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .delete-btn:hover {
-            background: #b02a37;
+            background: rgba(255, 107, 107, 0.5);
         }
 
         .timestamp {
             font-size: clamp(0.75rem, 2vw, 0.875rem);
-            color: #666;
-            margin-top: 0.25rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.5rem;
+            font-weight: 400;
         }
 
         .notification {
             position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 0.75rem 1.5rem;
-            background: #28a745;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
             color: white;
-            border-radius: 0.5rem;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
             display: none;
             z-index: 1000;
             font-size: clamp(0.875rem, 2.5vw, 1rem);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
 
         @media (max-width: 600px) {
             .container {
-                padding: 1rem;
+                padding: 1.5rem;
                 margin: 0.5rem;
+                border-radius: 1.5rem;
             }
 
             .buttons {
@@ -242,12 +336,13 @@
 
             button {
                 width: 100%;
-                padding: 0.75rem;
+                padding: 0.875rem;
             }
 
             .note-item {
                 flex-direction: column;
                 align-items: flex-start;
+                padding: 1rem;
             }
 
             .note-actions {
@@ -262,20 +357,19 @@
             }
 
             textarea {
-                min-height: 6rem;
+                min-height: 8rem;
             }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            button {
+            body {
+                animation: none;
+            }
+            button, .note-item {
                 transition: none;
             }
-            button:hover, button:active {
-                transform: none;
-                box-shadow: none;
-            }
-            button::after {
-                display: none;
+            .note-item {
+                animation: none;
             }
         }
     </style>
